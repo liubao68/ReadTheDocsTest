@@ -1,0 +1,170 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh_CN">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>使用AsynRestTemplate开发服务消费者 &#8212; Apache ServiceComb Java Chassis  文档</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="asynresttemplate">
+<h1>使用AsynRestTemplate开发服务消费者<a class="headerlink" href="#asynresttemplate" title="永久链接至标题">¶</a></h1>
+<div class="section" id="id1">
+<h2>概念阐述<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
+<p>AsyncRestTemplate 开发方式允许用户异步的进行服务调用。具体的业务流程和 RestTemplate 类似，只是这里以异步的形式进行服务的调用。</p>
+</div>
+<div class="section" id="id2">
+<h2>示例代码<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<p>AsyncRestTemplate 实例通过 new CseAsyncRestTemplate（）来创建和获取，再使用该实例通过自定义的 URL 进行服务调用。</p>
+<ul class="simple">
+<li>Spring MVC 客户端代码示例</li>
+</ul>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SpringmvcConsumerMain</span> <span class="p">{</span>
+  <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">LOG</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="p">.</span><span class="na">getLogger</span><span class="p">(</span><span class="n">SpringmvcConsumerMain</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="p">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="p">{</span>
+    <span class="n">init</span><span class="p">();</span>
+    <span class="n">Person</span> <span class="n">person</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Person</span><span class="p">();</span>
+    <span class="n">person</span><span class="p">.</span><span class="na">setName</span><span class="p">(</span><span class="s">&quot;ServiceComb/Java Chassis&quot;</span><span class="p">);</span>
+    <span class="c1">//AsyncRestTemplate Consumer</span>
+    <span class="n">CseAsyncRestTemplate</span> <span class="n">cseAsyncRestTemplate</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CseAsyncRestTemplate</span><span class="p">();</span>
+    <span class="n">ListenableFuture</span><span class="o">&lt;</span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">responseEntityListenableFuture</span> <span class="o">=</span> <span class="n">cseAsyncRestTemplate</span>
+        <span class="p">.</span><span class="na">postForEntity</span><span class="p">(</span><span class="s">&quot;cse://springmvc/springmvchello/sayhi?name=Java Chassis&quot;</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="n">String</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+    <span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">responseEntity</span> <span class="o">=</span> <span class="n">responseEntityListenableFuture</span><span class="p">.</span><span class="na">get</span><span class="p">();</span>
+    <span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;AsyncRestTemplate Consumer sayHi services: &quot;</span> <span class="o">+</span> <span class="n">responseEntity</span><span class="p">.</span><span class="na">getBody</span><span class="p">());</span>
+
+    <span class="n">HttpEntity</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span> <span class="n">entity</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HttpEntity</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">person</span><span class="p">);</span>
+    <span class="n">ListenableFuture</span><span class="o">&lt;</span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">listenableFuture</span> <span class="o">=</span> <span class="n">cseAsyncRestTemplate</span>
+        <span class="p">.</span><span class="na">exchange</span><span class="p">(</span><span class="s">&quot;cse://springmvc/springmvchello/sayhello&quot;</span><span class="p">,</span> <span class="n">HttpMethod</span><span class="p">.</span><span class="na">POST</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">String</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+    <span class="c1">//    ResponseEntity&lt;String&gt; responseEntity1 = listenableFuture.get();</span>
+    <span class="c1">//    System.out.println(&quot;AsyncRestTemplate Consumer sayHello services: &quot; + responseEntity1.getBody());</span>
+    <span class="c1">//设置回调函数</span>
+    <span class="n">listenableFuture</span><span class="p">.</span><span class="na">addCallback</span><span class="p">(</span>
+        <span class="k">new</span> <span class="n">ListenableFutureCallback</span><span class="o">&lt;</span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span><span class="p">()</span> <span class="p">{</span>
+          <span class="nd">@Override</span>
+          <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFailure</span><span class="p">(</span><span class="n">Throwable</span> <span class="n">ex</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">LOG</span><span class="p">.</span><span class="na">error</span><span class="p">(</span><span class="s">&quot;AsyncResTemplate Consumer catched exception when sayHello, &quot;</span><span class="p">,</span> <span class="n">ex</span><span class="p">);</span>
+          <span class="p">}</span>
+
+          <span class="nd">@Override</span>
+          <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSuccess</span><span class="p">(</span><span class="n">ResponseEntity</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;AsyncRestTemplate Consumer sayHello services: &quot;</span> <span class="o">+</span> <span class="n">result</span><span class="p">.</span><span class="na">getBody</span><span class="p">());</span>
+          <span class="p">}</span>
+        <span class="p">});</span>
+  <span class="p">}</span>
+
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">init</span><span class="p">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="p">{</span>
+    <span class="n">Log4jUtils</span><span class="p">.</span><span class="na">init</span><span class="p">();</span>
+    <span class="n">BeanUtils</span><span class="p">.</span><span class="na">init</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>说明 ：</p>
+<ul class="simple">
+<li>URL 的格式和 RestTemplate 一样，具体可以参考 restTemplate</li>
+<li>这里用自定义的 ListenableFuture 类来作为占位符，获取远程调用结束后可能获取的结果。同时也可以自定义回调函数，对可能返回的结果进行分批处理。</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Apache ServiceComb Java Chassis</a></h1>
+
+
+
+
+
+
+
+
+<h3>导航</h3>
+<p class="caption"><span class="caption-text">ServiceComb Java Chassis Developers Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Welcome to Apache ServiceComb Java Chassis’s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>快速搜索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="转向" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Apache ServiceComb Java Chassis Team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/build-consumer/using-AsyncRestTemplate.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

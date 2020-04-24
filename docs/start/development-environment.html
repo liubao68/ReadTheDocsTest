@@ -1,0 +1,382 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>安装本地开发环境 &mdash; Apache ServiceComb Java Chassis  文档</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="开发第一个微服务" href="first-sample.html" />
+    <link rel="prev" title="Java Chassis 的软件工程实践" href="design.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apache ServiceComb Java Chassis
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">ServiceComb Java Chassis Developers Guide</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Welcome to Apache ServiceComb Java Chassis’s documentation!</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="architecture.html">微服务系统架构</a></li>
+<li class="toctree-l2"><a class="reference internal" href="catalog.html">快速入门</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment-on-cloud.html">一键式配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design.html">Java Chassis 的软件工程实践 <a name="h1"></a></a></li>
+<li class="toctree-l2"><a class="reference internal" href="design.html#java-chassis-a-name-h2-a">Java Chassis 的运行时架构 <a name="h2"></a></a></li>
+<li class="toctree-l2"><a class="reference internal" href="design.html#java-chassis-a-name-h3-a">Java Chassis 微服务应用架构 <a name="h3"></a></a></li>
+<li class="toctree-l2"><a class="reference internal" href="design.html#java-chassis-a-name-h4-a">Java Chassis 微服务技术选型 <a name="h4"></a></a></li>
+<li class="toctree-l2"><a class="reference internal" href="design.html#java-chassis-spring-cloud-a-name-h5-a">Java Chassis 与 Spring Cloud  <a name="h5"></a></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">安装本地开发环境</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#jdk">JDK约束及安装步骤</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#maven">Maven安装步骤</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2"><strong>前提条件</strong></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3"><strong>安装步骤</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#eclipse">Eclipse安装</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4"><strong>前提条件</strong></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5"><strong>安装步骤</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#idea">IDEA安装</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id6"><strong>前提条件</strong></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7"><strong>安装步骤</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="first-sample.html">开发第一个微服务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="terminology.html">表1-1术语表</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">微服务系统架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="catalog.html">快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment-on-cloud.html">一键式配置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html">Java Chassis 的软件工程实践 <a name="h1"></a></a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html#java-chassis-a-name-h2-a">Java Chassis 的运行时架构 <a name="h2"></a></a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html#java-chassis-a-name-h3-a">Java Chassis 微服务应用架构 <a name="h3"></a></a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html#java-chassis-a-name-h4-a">Java Chassis 微服务技术选型 <a name="h4"></a></a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html#java-chassis-spring-cloud-a-name-h5-a">Java Chassis 与 Spring Cloud  <a name="h5"></a></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">安装本地开发环境</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#jdk">JDK约束及安装步骤</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#maven">Maven安装步骤</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2"><strong>前提条件</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3"><strong>安装步骤</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#eclipse">Eclipse安装</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4"><strong>前提条件</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5"><strong>安装步骤</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#idea">IDEA安装</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6"><strong>前提条件</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7"><strong>安装步骤</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="first-sample.html">开发第一个微服务</a></li>
+<li class="toctree-l1"><a class="reference internal" href="terminology.html">表1-1术语表</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache ServiceComb Java Chassis</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>安装本地开发环境</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/start/development-environment.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>安装本地开发环境<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<p>应用开发环境所需安装的工具包括JDK、Maven、Eclipse 和 IDEA 。如果已经安装了这些开发工具，请跳过本节。</p>
+<div class="section" id="jdk">
+<h2>JDK约束及安装步骤<a class="headerlink" href="#jdk" title="永久链接至标题">¶</a></h2>
+<p>1.JDK版本</p>
+<p>JDK版本要求1.8以上。</p>
+<p>2.JDK下载</p>
+<p>请到JDK 1.8版本的官方地址下载。</p>
+<p>3.JDK安装</p>
+<p>在官网下载JDK安装包后，选择合适的安装路径安装JDK。</p>
+<p>这里以windows系统为例：</p>
+<p>设置JAVA_HOME环境变量，指向Java安装目录。将%JAVA_HOME%\bin添加到系统路径path中。环境变量配置完成后，使用java -version命令验证是否安装成功，windows环境下回显如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">h00407576</span><span class="o">&gt;</span> <span class="n">java</span> <span class="o">-</span><span class="n">version</span>      
+ <span class="n">java</span> <span class="n">version</span> <span class="s2">&quot;1.8.0_121&quot;</span>      
+ <span class="n">Java</span><span class="p">(</span><span class="n">TM</span><span class="p">)</span> <span class="n">SE</span> <span class="n">Runtime</span> <span class="n">Environment</span> <span class="p">(</span><span class="n">build</span> <span class="mf">1.8</span><span class="o">.</span><span class="mi">0_121</span><span class="o">-</span><span class="n">b13</span><span class="p">)</span>      
+ <span class="n">Java</span> <span class="n">HotSpot</span><span class="p">(</span><span class="n">TM</span><span class="p">)</span> <span class="mi">64</span><span class="o">-</span><span class="n">Bit</span> <span class="n">Server</span> <span class="n">VM</span> <span class="p">(</span><span class="n">build</span> <span class="mf">25.121</span><span class="o">-</span><span class="n">b13</span><span class="p">,</span> <span class="n">mixed</span> <span class="n">mode</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="maven">
+<h2>Maven安装步骤<a class="headerlink" href="#maven" title="永久链接至标题">¶</a></h2>
+<p>Maven是一款集项目管理、代码编译、工程管理等等能力于一体的开发工具。</p>
+<div class="section" id="id2">
+<h3><strong>前提条件</strong><a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h3>
+<p>JDK已经安装成功。</p>
+</div>
+<div class="section" id="id3">
+<h3><strong>安装步骤</strong><a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h3>
+<p>a.在官方地址下载Maven安装包。</p>
+<p>b.（可选）在官方地址下载Eclipse插件m2eclipse。最新的Eclipse版本中带有Maven插件，则不用下载此插件</p>
+<p>c.解压Maven安装包到本机路径。</p>
+<p>d.设置环境变量。</p>
+<ul class="simple">
+<li>设置M2_HOME环境变量，指向Maven安装目录。</li>
+<li>将%M2_HOME%\bin添加到系统路径path中。</li>
+</ul>
+<p>e.（可选）设置本地仓库路径，用于保存从远程仓库获取的插件和依赖的副本。</p>
+<p>这里以路径D:\maven\repository为例。在/conf中找到settings.xml文件，设置localRepository为D:\maven\repository</p>
+<p>f. （可选）要想项目能够快速的下载各种依赖，建议配置一下maven仓库地址。</p>
+<p>在<code class="docutils literal notranslate"><span class="pre">profiles</span></code>中增加如下配置：</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;profile&gt;</span>
+    <span class="nt">&lt;id&gt;</span>MyProfile<span class="nt">&lt;/id&gt;</span>
+    <span class="nt">&lt;repositories&gt;</span>
+        <span class="nt">&lt;repository&gt;</span>
+            <span class="nt">&lt;id&gt;</span>SDK<span class="nt">&lt;/id&gt;</span>
+            <span class="nt">&lt;url&gt;</span>https://repo.huaweicloud.com/repository/maven/huaweicloudsdk/<span class="nt">&lt;/url&gt;</span>
+            <span class="nt">&lt;releases&gt;</span>
+                <span class="nt">&lt;enabled&gt;</span>true<span class="nt">&lt;/enabled&gt;</span>
+            <span class="nt">&lt;/releases&gt;</span>
+            <span class="nt">&lt;snapshots&gt;</span>
+                <span class="nt">&lt;enabled&gt;</span>false<span class="nt">&lt;/enabled&gt;</span>
+            <span class="nt">&lt;/snapshots&gt;</span>
+        <span class="nt">&lt;/repository&gt;</span>
+    <span class="nt">&lt;/repositories&gt;</span>
+<span class="nt">&lt;/profile&gt;</span>
+</pre></div>
+</div>
+<p>在<code class="docutils literal notranslate"><span class="pre">mirrors</span></code>节点中增加如下配置：</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;mirror&gt;</span>
+    <span class="nt">&lt;id&gt;</span>RepoMirror<span class="nt">&lt;/id&gt;</span>
+    <span class="nt">&lt;mirrorOf&gt;</span>*,!SDK<span class="nt">&lt;/mirrorOf&gt;</span>
+    <span class="nt">&lt;url&gt;</span>https://repo.huaweicloud.com/repository/maven/<span class="nt">&lt;/url&gt;</span>
+<span class="nt">&lt;/mirror&gt;</span>
+</pre></div>
+</div>
+<p>新增<code class="docutils literal notranslate"><span class="pre">activeProfiles</span></code>配置：</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;activeProfiles&gt;</span>
+    <span class="nt">&lt;activeProfile&gt;</span>MyProfile<span class="nt">&lt;/activeProfile&gt;</span>
+<span class="nt">&lt;/activeProfiles&gt;</span>
+</pre></div>
+</div>
+<p>g.结果验证</p>
+<p>使用mvn -version命令验证是否安装成功，windows环境下回显如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">h00407576</span><span class="o">&gt;</span><span class="n">mvn</span> <span class="o">-</span><span class="n">version</span>        
+ <span class="n">Apache</span> <span class="n">Maven</span> <span class="mf">3.3</span><span class="o">.</span><span class="mi">9</span> <span class="p">(</span><span class="n">bb52d8502b132ec0a5a3f4c09453c07478323dc5</span><span class="p">;</span> <span class="mi">2015</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">11</span><span class="n">T00</span><span class="p">:</span><span class="mi">41</span><span class="p">:</span><span class="mi">4</span>        
+ <span class="mi">7</span><span class="o">+</span><span class="mi">08</span><span class="p">:</span><span class="mi">00</span><span class="p">)</span>        
+ <span class="n">Maven</span> <span class="n">home</span><span class="p">:</span> <span class="n">D</span><span class="p">:</span>\<span class="n">soft</span>\<span class="n">apache</span><span class="o">-</span><span class="n">maven</span><span class="o">-</span><span class="mf">3.3</span><span class="o">.</span><span class="mi">9</span><span class="o">-</span><span class="nb">bin</span>\<span class="n">apache</span><span class="o">-</span><span class="n">maven</span><span class="o">-</span><span class="mf">3.3</span><span class="o">.</span><span class="mi">9</span>        
+ <span class="n">Java</span> <span class="n">version</span><span class="p">:</span> <span class="mf">1.8</span><span class="o">.</span><span class="mi">0_121</span><span class="p">,</span> <span class="n">vendor</span><span class="p">:</span> <span class="n">Oracle</span> <span class="n">Corporation</span>        
+ <span class="n">Java</span> <span class="n">home</span><span class="p">:</span> <span class="n">C</span><span class="p">:</span>\<span class="n">Program</span> <span class="n">Files</span>\<span class="n">Java</span>\<span class="n">jdk1</span><span class="o">.</span><span class="mf">8.0_121</span>\<span class="n">jre</span>        
+ <span class="n">Default</span> <span class="n">locale</span><span class="p">:</span> <span class="n">zh_CN</span><span class="p">,</span> <span class="n">platform</span> <span class="n">encoding</span><span class="p">:</span> <span class="n">GBK</span>        
+ <span class="n">OS</span> <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;windows 7&quot;</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="s2">&quot;6.1&quot;</span><span class="p">,</span> <span class="n">arch</span><span class="p">:</span> <span class="s2">&quot;amd64&quot;</span><span class="p">,</span> <span class="n">family</span><span class="p">:</span> <span class="s2">&quot;dos&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="eclipse">
+<h2>Eclipse安装<a class="headerlink" href="#eclipse" title="永久链接至标题">¶</a></h2>
+<div class="section" id="id4">
+<h3><strong>前提条件</strong><a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h3>
+<p>a.JDK已经安装。</p>
+<p>b.Maven已经安装。</p>
+</div>
+<div class="section" id="id5">
+<h3><strong>安装步骤</strong><a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h3>
+<p>a.在官方地址下载Eclipse安装包。</p>
+<p>b.安装Eclipse到本机。</p>
+<p>c.（可选）将之前Maven安装中介绍的插件m2eclipse解压到Eclipse安装目录下的plugins和features目录。最新的Eclipse版本</p>
+<p>中带有Maven插件，不要进行此操作</p>
+<p>d.启动Eclipse，配置jre、maven settings以及默认编码格式为utf-8。</p>
+</div>
+</div>
+<div class="section" id="idea">
+<h2>IDEA安装<a class="headerlink" href="#idea" title="永久链接至标题">¶</a></h2>
+<div class="section" id="id6">
+<h3><strong>前提条件</strong><a class="headerlink" href="#id6" title="永久链接至标题">¶</a></h3>
+<p>a.JDK已经安装。</p>
+<p>b.Maven已经安装。</p>
+</div>
+<div class="section" id="id7">
+<h3><strong>安装步骤</strong><a class="headerlink" href="#id7" title="永久链接至标题">¶</a></h3>
+<p>a. 在官方网站下载 IDEA 安装包，收费版或者社区版的按个人需求。</p>
+<p>b. 设置编码格式都为 utf-8。</p>
+<p>打开IDEA，选择 File -&gt; Settings -&gt; Editor -&gt; File Encoding
+把 project Encoding 和 default encoding for properties files 改为 utf-8。</p>
+<p>c. 设置maven 配置</p>
+<p>打开IDEA，选择 File -&gt; Settings -&gt; Build，Execution,Deployment -&gt; Bulid Tools -&gt; Maven
+注意配置 Maven home directory  和 User settings file</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="first-sample.html" class="btn btn-neutral float-right" title="开发第一个微服务" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="design.html" class="btn btn-neutral float-left" title="Java Chassis 的软件工程实践" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Apache ServiceComb Java Chassis Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,408 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>开发第一个微服务 &mdash; Apache ServiceComb Java Chassis  文档</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="表1-1术语表" href="terminology.html" />
+    <link rel="prev" title="安装本地开发环境" href="development-environment.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apache ServiceComb Java Chassis
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">ServiceComb Java Chassis Developers Guide</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Welcome to Apache ServiceComb Java Chassis’s documentation!</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="architecture.html">微服务系统架构</a></li>
+<li class="toctree-l2"><a class="reference internal" href="catalog.html">快速入门</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment-on-cloud.html">一键式配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design.html">Java Chassis 的软件工程实践 <a name="h1"></a></a></li>
+<li class="toctree-l2"><a class="reference internal" href="design.html#java-chassis-a-name-h2-a">Java Chassis 的运行时架构 <a name="h2"></a></a></li>
+<li class="toctree-l2"><a class="reference internal" href="design.html#java-chassis-a-name-h3-a">Java Chassis 微服务应用架构 <a name="h3"></a></a></li>
+<li class="toctree-l2"><a class="reference internal" href="design.html#java-chassis-a-name-h4-a">Java Chassis 微服务技术选型 <a name="h4"></a></a></li>
+<li class="toctree-l2"><a class="reference internal" href="design.html#java-chassis-spring-cloud-a-name-h5-a">Java Chassis 与 Spring Cloud  <a name="h5"></a></a></li>
+<li class="toctree-l2"><a class="reference internal" href="development-environment.html">安装本地开发环境</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">开发第一个微服务</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">准备工作</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#helloworld">开发一个HelloWorld服务</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pom">配置pom文件</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">添加配置文件</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#main">编写Main类</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rest">编写REST接口类</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">添加日志配置文件</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">启动服务</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">补充说明</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="terminology.html">表1-1术语表</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">微服务系统架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="catalog.html">快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment-on-cloud.html">一键式配置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html">Java Chassis 的软件工程实践 <a name="h1"></a></a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html#java-chassis-a-name-h2-a">Java Chassis 的运行时架构 <a name="h2"></a></a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html#java-chassis-a-name-h3-a">Java Chassis 微服务应用架构 <a name="h3"></a></a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html#java-chassis-a-name-h4-a">Java Chassis 微服务技术选型 <a name="h4"></a></a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html#java-chassis-spring-cloud-a-name-h5-a">Java Chassis 与 Spring Cloud  <a name="h5"></a></a></li>
+<li class="toctree-l1"><a class="reference internal" href="development-environment.html">安装本地开发环境</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">开发第一个微服务</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">准备工作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#helloworld">开发一个HelloWorld服务</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pom">配置pom文件</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">添加配置文件</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#main">编写Main类</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rest">编写REST接口类</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">添加日志配置文件</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">启动服务</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">补充说明</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="terminology.html">表1-1术语表</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apache ServiceComb Java Chassis</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>开发第一个微服务</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/start/first-sample.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>开发第一个微服务<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<div class="section" id="id2">
+<h2>准备工作<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<p>在开发第一个Java-Chassis微服务之前，请先确保你的本地开发环境已经准备就绪，参考<a class="reference internal" href="development-environment.html"><span class="doc">安装本地开发环境</span></a>。</p>
+<p>本文示例需要用到服务中心，请参考<a class="reference external" href="http://servicecomb.apache.org/cn/docs/products/service-center/install/">ServiceCenter 安装说明</a>。</p>
+</div>
+<div class="section" id="helloworld">
+<h2>开发一个HelloWorld服务<a class="headerlink" href="#helloworld" title="永久链接至标题">¶</a></h2>
+<div class="section" id="pom">
+<h3>配置pom文件<a class="headerlink" href="#pom" title="永久链接至标题">¶</a></h3>
+<p>创建一个空的maven工程。建议先配置<code class="docutils literal notranslate"><span class="pre">dependencyManagement</span></code>来管理依赖项，依赖项只需要引入<code class="docutils literal notranslate"><span class="pre">solution-basic</span></code>即可：</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;dependencyManagement&gt;</span>
+  <span class="nt">&lt;dependencies&gt;</span>
+    <span class="nt">&lt;dependency&gt;</span>
+      <span class="nt">&lt;groupId&gt;</span>org.apache.servicecomb<span class="nt">&lt;/groupId&gt;</span>
+      <span class="nt">&lt;artifactId&gt;</span>java-chassis-dependencies<span class="nt">&lt;/artifactId&gt;</span>
+      <span class="nt">&lt;version&gt;</span>${java-chassis-dependencies.version}<span class="nt">&lt;/version&gt;</span>
+      <span class="nt">&lt;type&gt;</span>pom<span class="nt">&lt;/type&gt;</span>
+      <span class="nt">&lt;scope&gt;</span>import<span class="nt">&lt;/scope&gt;</span>
+    <span class="nt">&lt;/dependency&gt;</span>
+  <span class="nt">&lt;/dependencies&gt;</span>
+<span class="nt">&lt;/dependencyManagement&gt;</span>
+<span class="nt">&lt;dependencies&gt;</span>
+  <span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.apache.servicecomb<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>solution-basic<span class="nt">&lt;/artifactId&gt;</span>
+  <span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;/dependencies&gt;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">solution-basic</span></code>中已经包含了常见场景下开发Java-Chassis微服务所需的全部依赖项。</p>
+<p>Java-Chassis 2.0版本还需要引入<code class="docutils literal notranslate"><span class="pre">maven-compiler-plugin</span></code>插件，使项目打包时保留方法参数名：</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;build&gt;</span>
+  <span class="nt">&lt;plugins&gt;</span>
+    <span class="nt">&lt;plugin&gt;</span>
+      <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+      <span class="nt">&lt;artifactId&gt;</span>maven-compiler-plugin<span class="nt">&lt;/artifactId&gt;</span>
+      <span class="nt">&lt;version&gt;</span>3.1<span class="nt">&lt;/version&gt;</span>
+      <span class="nt">&lt;configuration&gt;</span>
+        <span class="nt">&lt;compilerArgument&gt;</span>-parameters<span class="nt">&lt;/compilerArgument&gt;</span>
+        <span class="nt">&lt;encoding&gt;</span>UTF-8<span class="nt">&lt;/encoding&gt;</span>
+        <span class="nt">&lt;source&gt;</span>1.8<span class="nt">&lt;/source&gt;</span>
+        <span class="nt">&lt;target&gt;</span>1.8<span class="nt">&lt;/target&gt;</span>
+      <span class="nt">&lt;/configuration&gt;</span>
+    <span class="nt">&lt;/plugin&gt;</span>
+  <span class="nt">&lt;/plugins&gt;</span>
+<span class="nt">&lt;/build&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>添加配置文件<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h3>
+<p>Java-Chassis默认读取的配置文件名为<code class="docutils literal notranslate"><span class="pre">microservice.yaml</span></code>，存放在<code class="docutils literal notranslate"><span class="pre">resources</span></code>目录中。</p>
+<p>文件内容如下，这份文件表示当前开发的是<code class="docutils literal notranslate"><span class="pre">sample</span></code>应用下的名为<code class="docutils literal notranslate"><span class="pre">helloworld</span></code>的微服务，版本为0.0.1。该微服务连接的服务中心地址为<code class="docutils literal notranslate"><span class="pre">http://127.0.0.1:30100</span></code>，监听<code class="docutils literal notranslate"><span class="pre">8080</span></code>端口。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">APPLICATION_ID</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sample</span>
+<span class="nt">service_description</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helloworld</span>
+  <span class="nt">version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
+<span class="nt">servicecomb</span><span class="p">:</span>
+  <span class="nt">service</span><span class="p">:</span>
+    <span class="nt">registry</span><span class="p">:</span>
+      <span class="nt">address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">http://127.0.0.1:30100</span>
+  <span class="nt">rest</span><span class="p">:</span>
+    <span class="nt">address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.0.0.0:8080</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="main">
+<h3>编写Main类<a class="headerlink" href="#main" title="永久链接至标题">¶</a></h3>
+<p>在工程中添加一个Main类，用于启动微服务实例：</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nn">org.apache.servicecomb.samples</span><span class="p">;</span>
+
+<span class="kn">import</span> <span class="nn">org.apache.servicecomb.foundation.common.utils.BeanUtils</span><span class="p">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AppMain</span> <span class="p">{</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">BeanUtils</span><span class="p">.</span><span class="na">init</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>调用<code class="docutils literal notranslate"><span class="pre">org.apache.servicecomb.foundation.common.utils.BeanUtils#init()</span></code>方法会完成配置加载、Spring应用上下文加载、微服务注册等一系列启动流程。</p>
+</div>
+<div class="section" id="rest">
+<h3>编写REST接口类<a class="headerlink" href="#rest" title="永久链接至标题">¶</a></h3>
+<p>最后在工程中添加一个REST接口类用于接收请求：</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nn">org.apache.servicecomb.samples.service</span><span class="p">;</span>
+
+<span class="kn">import</span> <span class="nn">org.apache.servicecomb.provider.rest.common.RestSchema</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.GetMapping</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RequestMapping</span><span class="p">;</span>
+
+<span class="nd">@RestSchema</span><span class="p">(</span><span class="n">schemaId</span> <span class="o">=</span> <span class="s">&quot;hello&quot;</span><span class="p">)</span>
+<span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWorldService</span> <span class="p">{</span>
+  <span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&quot;/hello&quot;</span><span class="p">)</span>
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">hello</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="s">&quot;Hello world!&quot;</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>添加日志配置文件<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">solution-basic</span></code>引入了log4j2组件。如果想要看到运行日志，还需要手动添加一份日志配置文件，文件存放位置为<code class="docutils literal notranslate"><span class="pre">resources\log4j2.xml</span></code>，内容如下：</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;Configuration</span> <span class="na">status=</span><span class="s">&quot;WARN&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;Appenders&gt;</span>
+    <span class="nt">&lt;Console</span> <span class="na">name=</span><span class="s">&quot;Console&quot;</span> <span class="na">target=</span><span class="s">&quot;SYSTEM_OUT&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;PatternLayout</span> <span class="na">pattern=</span><span class="s">&quot;%d{HH:mm:ss.SSS} [%t] %-5level %logger{36}[%L] - %msg%n&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/Console&gt;</span>
+  <span class="nt">&lt;/Appenders&gt;</span>
+  <span class="nt">&lt;Loggers&gt;</span>
+    <span class="nt">&lt;Root</span> <span class="na">level=</span><span class="s">&quot;info&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;AppenderRef</span> <span class="na">ref=</span><span class="s">&quot;Console&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/Root&gt;</span>
+  <span class="nt">&lt;/Loggers&gt;</span>
+<span class="nt">&lt;/Configuration&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h3>启动服务<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h3>
+<p>以上工作完成后，运行<code class="docutils literal notranslate"><span class="pre">AppMain</span></code>类即可启动微服务。在浏览器中打开本地服务中心的页面<code class="docutils literal notranslate"><span class="pre">http://127.0.0.1:30103/</span></code>，如果能看到helloworld服务的实例记录，则表示启动成功。如下图所示：
+<img alt="../_images/first-sample-registered-in-sc.png" src="../_images/first-sample-registered-in-sc.png" /></p>
+<p>访问<code class="docutils literal notranslate"><span class="pre">http://127.0.0.1:8080/hello</span></code>，可以得到helloworld服务的响应<code class="docutils literal notranslate"><span class="pre">&quot;Hello</span> <span class="pre">world!&quot;</span></code>。至此，第一个Java-Chassis微服务开发完成。</p>
+</div>
+</div>
+<div class="section" id="id6">
+<h2>补充说明<a class="headerlink" href="#id6" title="永久链接至标题">¶</a></h2>
+<p>上文以Spring MVC开发风格来编写helloworld服务的REST接口类，目前Java-Chassis提供了三种REST接口类开发风格：</p>
+<ul class="simple">
+<li>Spring MVC</li>
+<li>JaxRS</li>
+<li>POJO</li>
+</ul>
+<p>Spring MVC和JaxRS适合REST接口开发。 POJO是通常说的RPC，适合于进行内部接口开发。java-chassis允许在一个微服务里面混合使用上述开发方式，并且可以使用完全一致的方式，比如RestTemplate或者POJO的方式访问不同类型的服务，所以开始之前，可以根据熟悉程度，选择任意一种开发方式即可。java-chassis的开发方式和通信方式是完全解耦的，因此不同的开发方式并没有性能上的差异。</p>
+<p>开发者也可以通过如下方式快速构建一个项目：</p>
+<ul>
+<li><p class="first">下载samples项目。java-chassis提供了大量的示例代码，这些示例代码可以通过<a class="reference external" href="https://github.com/apache/servicecomb-samples">servicecomb-samples</a>获取。</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/springmvc-sample">Spring MVC例子</a></li>
+<li><a class="reference external" href="https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/jaxrs-sample">JaxRS例子</a></li>
+<li><a class="reference external" href="https://github.com/apache/servicecomb-samples/tree/master/java-chassis-samples/pojo-sample">POJO例子</a></li>
+</ul>
+</li>
+<li><p class="first">使用archetypes生成项目</p>
+<p>archetypes是maven提供的一种机制，对于使用maven的用户，可以在项目里面配置插件，生成项目。java-chassis提供了多个archetypes供开发者使用，详细参考<a class="reference external" href="https://github.com/apache/servicecomb-java-chassis/tree/master/archetypes">链接</a></p>
+</li>
+<li><p class="first">使用脚手架生成项目</p>
+<p>脚手架提供了一个图形化向导，通过向导可以快速构建项目，参考<a class="reference external" href="http://start.servicecomb.io/">链接</a>。</p>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="terminology.html" class="btn btn-neutral float-right" title="表1-1术语表" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="development-environment.html" class="btn btn-neutral float-left" title="安装本地开发环境" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Apache ServiceComb Java Chassis Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,158 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh_CN">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>使用透明RPC方式开发服务消费者 &#8212; Apache ServiceComb Java Chassis  文档</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="rpc">
+<h1>使用透明RPC方式开发服务消费者<a class="headerlink" href="#rpc" title="永久链接至标题">¶</a></h1>
+<div class="section" id="id1">
+<h2>概念阐述<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
+<p>透明RPC开发模式允许用户通过简单的java interface像本地调用一样进行服务调用。<br />透明RPC仅仅是一种开发模式：</p>
+<ul class="simple">
+<li>与使用highway还是RESTful传输没有关联</li>
+<li>与producer使用透明RPC/Jax-RS还是SpringMVC模式开发没有关联</li>
+<li>也与producer代码是否实现这个interface没有关联。</li>
+</ul>
+<p>透明RPC开发模式与spring cloud的feign类似，不过更简单，因为不必在这个interface中增加任何RESTful annotation。</p>
+</div>
+<div class="section" id="spring-bean-rpcreference">
+<h2>在spring bean中通过&#64;RpcReference声明<a class="headerlink" href="#spring-bean-rpcreference" title="永久链接至标题">¶</a></h2>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SomeBean</span> <span class="p">{</span>
+  <span class="p">......</span>
+  
+  <span class="nd">@RpcReference</span><span class="p">(</span><span class="n">microserviceName</span> <span class="o">=</span> <span class="s">&quot;helloService&quot;</span><span class="p">,</span> <span class="n">schemaId</span> <span class="o">=</span> <span class="s">&quot;helloSchema&quot;</span><span class="p">)</span>
+  <span class="kd">private</span> <span class="n">Hello</span> <span class="n">hello</span><span class="p">;</span>
+  
+  <span class="p">......</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="spring-bean-api">
+<h2>脱离spring bean，直接通过api声明<a class="headerlink" href="#spring-bean-api" title="永久链接至标题">¶</a></h2>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Hello</span> <span class="n">hello</span> <span class="o">=</span> <span class="n">Invoker</span><span class="p">.</span><span class="na">createProxy</span><span class="p">(</span><span class="s">&quot;helloService&quot;</span><span class="p">,</span> <span class="s">&quot;helloSchema&quot;</span><span class="p">,</span> <span class="n">Hello</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="reactive">
+<h2>reactive<a class="headerlink" href="#reactive" title="永久链接至标题">¶</a></h2>
+<p>只需要使用jdk的CompletableFuture对返回值进行包装即可</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">interface</span> <span class="nc">Hello</span> <span class="p">{</span>
+  <span class="n">CompletableFuture</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">sayHi</span><span class="p">(</span><span class="n">String</span> <span class="n">name</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>同一个interface中，可以同时声明同一个方法的reactive和同步原型<br />因为要求方法名与契约中的operationId一一对应，而仅有返回值类型不同，在java中是非法的，所以需要修改方法名，并通过swagger annotation来声明真正的operationId</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kd">interface</span> <span class="nc">Hello</span> <span class="p">{</span>
+  <span class="n">String</span> <span class="nf">sayHi</span><span class="p">(</span><span class="n">String</span> <span class="n">name</span><span class="p">);</span>
+  
+  <span class="nd">@ApiOperation</span><span class="p">(</span><span class="n">nickname</span> <span class="o">=</span> <span class="s">&quot;sayHi&quot;</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="s">&quot;reactive method for sayHi&quot;</span><span class="p">)</span>
+  <span class="n">CompletableFuture</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">asyncSayHi</span><span class="p">(</span><span class="n">String</span> <span class="n">name</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Apache ServiceComb Java Chassis</a></h1>
+
+
+
+
+
+
+
+
+<h3>导航</h3>
+<p class="caption"><span class="caption-text">ServiceComb Java Chassis Developers Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Welcome to Apache ServiceComb Java Chassis’s documentation!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>快速搜索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="转向" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Apache ServiceComb Java Chassis Team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/build-consumer/develop-consumer-using-rpc.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
